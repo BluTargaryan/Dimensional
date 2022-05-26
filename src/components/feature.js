@@ -1,9 +1,11 @@
 import { motion } from "framer-motion";
 import styled from "styled-components";
 
-import witcher from '../img/witcher.png'
 import trailer from '../img/witcher-trailer.png'
 import close from '../img/close-blk.svg'
+
+
+
 
 import { featureScroll } from "./animation";
 
@@ -25,11 +27,19 @@ const VidClose = () =>{
 }
 
 
+
+
 const Feature = () => {
+
+
     const[element,controls] = useScroll();
 return(
 <StyledFeature variants={featureScroll} animate={controls} initial="hidden" ref={element}>
+
+
+
 <MovieDeets>
+
 <h1>the witcher</h1>
 <p>The Witcher follows the story of Geralt of Rivia, a solitary monster hunter, who struggles to find his place in a world where people often prove more wicked than monsters and beasts.</p>
 <Trailer onClick={Vid}>
@@ -67,6 +77,8 @@ return(
 <p>1/5</p>
 </TagDeets>
 
+
+
 <iframe id="vid" width="560" height="315" src="https://www.youtube-nocookie.com/embed/ndl1W4ltcmg?" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 <img id="button" src={close} alt="" onClick={VidClose}/>
 </StyledFeature>
@@ -79,7 +91,7 @@ height:500px ;
 position:absolute ;
 z-index:2;
 background-color:red ;
-background-image:linear-gradient(rgba(0,0,0,.2),rgba(0,0,0,.2)),url(${witcher}) ;
+background-image:linear-gradient(rgba(0,0,0,.2),rgba(0,0,0,.2)),url(${`https://image.tmdb.org/t/p/original/qK7Ssnrfvrt65F66A1thvehfQg2.jpg`}) ;
 background-size:cover ;
 top:12% ;
 left: 50%;
@@ -93,18 +105,20 @@ iframe{
     z-index:4;
 }
 
-img{
+#button{
     position:absolute ;
     left:101% ;
     top:0 ;
     width:40px ;
 }
 
-iframe,img{
+iframe,#button{
     display:none ;
     cursor: pointer;
 }
 `
+
+
 const MovieDeets = styled(motion.div)`
 width:70% ;
 height:100% ;
