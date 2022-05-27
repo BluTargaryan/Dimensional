@@ -29,19 +29,19 @@ const VidClose = () =>{
 
 
 
-const Feature = () => {
+const Feature = ({img,herotxt,description,key}) => {
 
-
+//console.log(herotxt)
     const[element,controls] = useScroll();
 return(
-<StyledFeature variants={featureScroll} animate={controls} initial="hidden" ref={element}>
+<StyledFeature variants={featureScroll} animate={controls} initial="hidden" ref={element} style={{background: `url(https://image.tmdb.org/t/p/original${img})`}}>
 
-
+<div id="shade"></div>
 
 <MovieDeets>
 
-<h1>the witcher</h1>
-<p>The Witcher follows the story of Geralt of Rivia, a solitary monster hunter, who struggles to find his place in a world where people often prove more wicked than monsters and beasts.</p>
+<h1>{herotxt}</h1>
+<p>{description}</p>
 <Trailer onClick={Vid}>
 <div className="trailer-button">
     <p>watch trailer</p>
@@ -90,13 +90,22 @@ width:1100px ;
 height:500px ;
 position:absolute ;
 z-index:2;
-background-color:red ;
-background-image:linear-gradient(rgba(0,0,0,.2),rgba(0,0,0,.2)),url(${`https://image.tmdb.org/t/p/original/qK7Ssnrfvrt65F66A1thvehfQg2.jpg`}) ;
-background-size:cover ;
+background-size:cover !important ;
 top:12% ;
 left: 50%;
 transform: translateX(-50%);
 display:flex ;
+cur
+
+#shade{
+    width:100% ;
+height:100% ;
+position:absolute ;
+z-index:-1;
+top:0 ;
+left:0 ;
+background:#00000018 ;
+}
 
 iframe{
     width:100% ;
@@ -128,7 +137,7 @@ margin-left:20px ;
 h1{
     text-transform:uppercase ;
     font-family:'NetflixSansBold', sans-serif ;
-    font-size:40px ;
+    font-size:30px ;
     margin-top:150px ;
     line-height:55px ;
 }
@@ -145,8 +154,9 @@ width:200px ;
 height:120px ;
 background-image:linear-gradient(rgba(0,0,0,.2),rgba(0,0,0,.2)),url(${trailer}) ;
 background-size:cover ;
-margin-top:80px ;
+top:70% ;
 cursor: pointer;
+position:absolute ;
 
 
 div{

@@ -8,5 +8,12 @@ const base_url = 'https://api.themoviedb.org/3/';
 
 //Popular 
 const trending = `trending/all/day?api_key=${key}`
+//Movies
+
 
 export const popularURL = () =>`${base_url}${trending}`
+
+export const movieURL = (i) => `${base_url}movie/${i}?api_key=${key}&language=en-US&append_to_response=videos,images&include_image_language=en,null`
+
+
+export const showURL = (i) => `${base_url}tv/${i}?api_key=${key}&language=en-US&append_to_response=videos,images&include_image_language=en,null`

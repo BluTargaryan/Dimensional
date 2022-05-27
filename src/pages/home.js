@@ -11,7 +11,7 @@ import BackgroundImg from "../components/bgimg";
 
 //redux
 import { useDispatch, useSelector } from "react-redux";
-import { loadPopular } from "../actions/homeAction";
+import { loadPopular, loadCurrMovie,loadCurrShow } from "../actions/homeAction";
 
 
 import circlewhite from '../img/circlewhite.svg'
@@ -21,49 +21,67 @@ import arrowr from '../img/arrowr.svg'
 
 
 const Home = () => {
-    //fetch games
-    const dispatch = useDispatch();
-
-   
-
-    useEffect(() => {
-        dispatch(loadPopular());
-    }, [dispatch]);
-
+  
     //get that data back. Note: make sure to not add parenthesis if it is just onename 
     const popular= useSelector((state)=>state.home.popular) 
     //console.log(popular.length)
     //position variable 
-    const [position,setPosition] = useState(0)
+    const [currentState,setCurrentState] = useState(0)
+
+
+      
+
+    
+   
+
+
+      //fetch games
+      const dispatch = useDispatch();
+      useEffect(() => {
+          dispatch(loadPopular());
+          
+      }, [dispatch]);
+  
+
+
+  
 
 
     //change position
     const previous = () =>{
-        if(position<=0){
-            //position is set to 5 forillusion of cycling
-            setPosition(position+4)
+        if(currentState<=0){
+            //position is set to 4 forillusion of cycling
+            setCurrentState(4)
         }else{
-            setPosition(position -1)
+            //decrement
+            setCurrentState(currentState-1)
         }
 
-        console.log(position)
+        //console.log(position)
     }
 
     const next = () =>{
-        if(position>=4){
-            //position is set to 5 forillusion of cycling
-            setPosition(position-4)
+        if(currentState>=4){
+            //position is set to  forillusion of cycling
+            setCurrentState(0)
         }else{
-            setPosition(position +1)
+            //increment
+            setCurrentState(currentState+1)
         }
 
-        console.log(position)
+        //console.log(position)
     }
+
+
+   
 
 
     
     //set it to display if popular has a length. this will indicate that 
 if(popular.length!==0){
+//console.log(popular[currentState].id)
+    if(popular[currentState].media_type==='movie'){dispatch(loadCurrMovie(popular[currentState].id)); }
+    if(popular[currentState].media_type==='tv'){dispatch(loadCurrShow(popular[currentState].id)); }
     return(
         <StyledHome>
              <Selected>
@@ -72,10 +90,16 @@ if(popular.length!==0){
    <img id="arrow" src={arrowr} alt="" onClick={()=>next()}/>
     </Selected>
     <BackgroundImg
-     img= {popular[position].backdrop_path}/>
+     img= {popular[currentState].backdrop_path}
+    />
     
      <Menu/>
-     <Feature/>
+     <Feature 
+     img= {popular[currentState].backdrop_path}
+     herotxt = {popular[currentState].original_title || popular[currentState].name}
+     description= {popular[currentState].overview}
+     />
+     
         </StyledHome>
      
     )

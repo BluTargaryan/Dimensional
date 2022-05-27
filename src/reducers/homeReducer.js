@@ -1,5 +1,7 @@
 const initState = {
-popular:[]
+popular:[],
+currentMovie:[],
+currentShow:[]
 };
 
 export const homeReducer = (state=initState,action)=>{
@@ -8,6 +10,16 @@ export const homeReducer = (state=initState,action)=>{
             return{
                 ...state,
                 popular:action.payload.popular
+            };
+            case 'FETCH_MOVIE':
+            return{
+                ...state,
+                currentMovie:action.payload.currentMovie
+            };
+            case 'FETCH_SHOW':
+            return{
+                ...state,
+                currentShow:action.payload.currentShow
             };
          default:
             return { ...state }
