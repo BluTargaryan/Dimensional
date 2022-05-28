@@ -17,3 +17,5 @@ export const movieURL = (i) => `${base_url}movie/${i}?api_key=${key}&language=en
 
 
 export const showURL = (i) => `${base_url}tv/${i}?api_key=${key}&language=en-US&append_to_response=videos,images&include_image_language=en,null`
+
+export const creditsURL = (i) =>`${base_url}credit/${i}?api_key=${key}`

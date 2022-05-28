@@ -1,8 +1,12 @@
 import { motion } from "framer-motion";
 import styled from "styled-components";
 
-import trailer from '../img/witcher-trailer.png'
 import close from '../img/close-blk.svg'
+
+import { useEffect } from "react";
+
+//redux
+import { useSelector } from "react-redux";
 
 
 
@@ -11,13 +15,60 @@ import { featureScroll } from "./animation";
 
 import { useScroll } from "../scroll";
 
+
+
+
+
+
+const Feature = ({img,herotxt,description,media}) => {
+    const currentMovie= useSelector((state)=>state.home.currentMovie) 
+    const currentShow= useSelector((state)=>state.home.currentShow) 
+
+    let movietrailer_image,showtrailer_image,movietrailer_vid,showtrailer_vid=null
+    
+    //checks if both states are ready before assignment. assigns both trailer img and vid
+    if(currentMovie.length!==0){
+         movietrailer_image=currentMovie.images.backdrops[1].file_path
+         let videos = currentMovie.videos.results
+         videos.map(video=>{
+             if(video.type==="Trailer"){
+               movietrailer_vid=video.key
+               return null
+             }
+             return null
+         }
+
+         )
+    }
+    if(currentShow.length!==0){
+        showtrailer_image=currentShow.images.backdrops[1].file_path
+        let videos = currentShow.videos.results
+        videos.map(video=>{
+            if(video.type==="Trailer"){
+              showtrailer_vid=video.key
+              return null
+            }
+            return null
+        }
+
+        )
+    }
+
+    //to open vid
 const Vid = () =>{
     document.getElementById('vid').style.display="initial"
     document.getElementById('button').style.display="initial"
     //to add iframe src
-    document.getElementById('vid').src="https://www.youtube-nocookie.com/embed/ndl1W4ltcmg?"
+    if(currentMovie.length!==0 && media==="movie"){
+        document.getElementById('vid').src=`https://www.youtube-nocookie.com/embed/${movietrailer_vid}?`
+    }
+    if(currentShow.length!==0 && media==="tv"){
+        document.getElementById('vid').src=`https://www.youtube-nocookie.com/embed/${showtrailer_vid}?`
+    }
+   
 }
 
+//to close vid
 const VidClose = () =>{
     document.getElementById('vid').style.display="none"
     document.getElementById('button').style.display="none"
@@ -26,10 +77,22 @@ const VidClose = () =>{
 
 }
 
+//useEffect done to run movie or show check after render
+    useEffect(() => {
+        if(media==="movie"){
+            document.getElementById('movietrail').style.display="initial"
+            document.getElementById('showtrail').style.display="none"
+        }
+        if(media==="tv"){
+            document.getElementById('movietrail').style.display="none"
+            document.getElementById('showtrail').style.display="initial"
+        }
+        
+    }, [media]);
+  
 
-
-
-const Feature = ({img,herotxt,description,key}) => {
+    
+    
 
 //console.log(herotxt)
     const[element,controls] = useScroll();
@@ -42,7 +105,14 @@ return(
 
 <h1>{herotxt}</h1>
 <p>{description}</p>
-<Trailer onClick={Vid}>
+<Trailer id="movietrail" onClick={Vid} style={{background: `url(https://image.tmdb.org/t/p/original${movietrailer_image})`}}>
+<div className="trailer-button">
+    <p>watch trailer</p>
+     <div className="background">
+         </div>
+         </div>
+</Trailer>
+<Trailer id="showtrail" onClick={Vid} style={{background: `url(https://image.tmdb.org/t/p/original${showtrailer_image})`}}>
 <div className="trailer-button">
     <p>watch trailer</p>
      <div className="background">
@@ -79,10 +149,13 @@ return(
 
 
 
-<iframe id="vid" width="560" height="315" src="https://www.youtube-nocookie.com/embed/ndl1W4ltcmg?" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<iframe id="vid" className="movie_vid" width="560" height="315" src="" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 <img id="button" src={close} alt="" onClick={VidClose}/>
 </StyledFeature>
 )
+
+
+
 }
 
 const StyledFeature = styled(motion.div)`
@@ -152,8 +225,7 @@ p{
 const Trailer = styled(motion.div)`
 width:200px ;
 height:120px ;
-background-image:linear-gradient(rgba(0,0,0,.2),rgba(0,0,0,.2)),url(${trailer}) ;
-background-size:cover ;
+background-size:cover !important;
 top:70% ;
 cursor: pointer;
 position:absolute ;

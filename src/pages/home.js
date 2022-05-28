@@ -11,7 +11,7 @@ import BackgroundImg from "../components/bgimg";
 
 //redux
 import { useDispatch, useSelector } from "react-redux";
-import { loadPopular, loadCurrMovie,loadCurrShow } from "../actions/homeAction";
+import { loadPopular, loadCurrMovie,loadCurrShow,loadCredits } from "../actions/homeAction";
 
 
 import circlewhite from '../img/circlewhite.svg'
@@ -24,6 +24,9 @@ const Home = () => {
   
     //get that data back. Note: make sure to not add parenthesis if it is just onename 
     const popular= useSelector((state)=>state.home.popular) 
+
+
+
     //console.log(popular.length)
     //position variable 
     const [currentState,setCurrentState] = useState(0)
@@ -73,13 +76,15 @@ const Home = () => {
     }
 
 
-   
+
 
 
     
     //set it to display if popular has a length. this will indicate that 
 if(popular.length!==0){
 //console.log(popular[currentState].id)
+//to load movie,show and credit states
+dispatch(loadCredits(popular[currentState].id));
     if(popular[currentState].media_type==='movie'){dispatch(loadCurrMovie(popular[currentState].id)); }
     if(popular[currentState].media_type==='tv'){dispatch(loadCurrShow(popular[currentState].id)); }
     return(
@@ -98,6 +103,7 @@ if(popular.length!==0){
      img= {popular[currentState].backdrop_path}
      herotxt = {popular[currentState].original_title || popular[currentState].name}
      description= {popular[currentState].overview}
+     media={popular[currentState].media_type}
      />
      
         </StyledHome>
