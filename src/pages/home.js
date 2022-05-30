@@ -11,7 +11,7 @@ import BackgroundImg from "../components/bgimg";
 
 //redux
 import { useDispatch, useSelector } from "react-redux";
-import { loadPopular, loadCurrMovie,loadCurrShow,loadCredits } from "../actions/homeAction";
+import { loadPopular, loadCurrMovie,loadCurrShow,loadMovieCredits,loadShowCredits } from "../actions/homeAction";
 
 
 import circlewhite from '../img/circlewhite.svg'
@@ -84,7 +84,8 @@ const Home = () => {
 if(popular.length!==0){
 //console.log(popular[currentState].id)
 //to load movie,show and credit states
-dispatch(loadCredits(popular[currentState].id));
+dispatch(loadMovieCredits(popular[currentState].id));
+dispatch(loadShowCredits(popular[currentState].id));
     if(popular[currentState].media_type==='movie'){dispatch(loadCurrMovie(popular[currentState].id)); }
     if(popular[currentState].media_type==='tv'){dispatch(loadCurrShow(popular[currentState].id)); }
     return(
@@ -104,6 +105,7 @@ dispatch(loadCredits(popular[currentState].id));
      herotxt = {popular[currentState].original_title || popular[currentState].name}
      description= {popular[currentState].overview}
      media={popular[currentState].media_type}
+     position={currentState+1}
      />
      
         </StyledHome>

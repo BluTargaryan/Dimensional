@@ -1,5 +1,5 @@
 import axios from "axios";
-import { popularURL, movieURL,showURL,creditsURL } from "../api";
+import { popularURL, movieURL,showURL,moviecreditsURL, showcreditsURL } from "../api";
 
 //action creator
 export const loadPopular = () => async (dispatch)=>{
@@ -27,6 +27,7 @@ export const loadCurrMovie = (x) => async (dispatch)=>{
 export const loadCurrShow = (y) => async (dispatch)=>{
     //fetch axios
     const currShowData = await axios.get(showURL(y));
+    console.log(y)
     dispatch({
         type:"FETCH_SHOW",
         payload:{
@@ -34,14 +35,24 @@ export const loadCurrShow = (y) => async (dispatch)=>{
         }
     });
 }
-export const loadCredits = (z) => async (dispatch)=>{
+export const loadMovieCredits = (z) => async (dispatch)=>{
     //fetch axios
-    const creditsData= await axios.get(creditsURL(z));
-    console.log(z)
+    const moviecreditsData= await axios.get(moviecreditsURL(z));
     dispatch({
-        type:"FETCH_CREDITS",
+        type:"FETCH_MOVIE_CREDITS",
         payload:{
-            credits:creditsData.data
+            moviecredits:moviecreditsData.data
+        }
+    });
+}
+export const loadShowCredits = (z) => async (dispatch)=>{
+    //fetch axios
+    const showcreditsData= await axios.get(showcreditsURL(z));
+    
+    dispatch({
+        type:"FETCH_SHOW_CREDITS",
+        payload:{
+            showcredits:showcreditsData.data
         }
     });
 }

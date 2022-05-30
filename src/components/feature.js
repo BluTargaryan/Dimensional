@@ -20,9 +20,13 @@ import { useScroll } from "../scroll";
 
 
 
-const Feature = ({img,herotxt,description,media}) => {
+const Feature = ({img,herotxt,description,media,position}) => {
     const currentMovie= useSelector((state)=>state.home.currentMovie) 
     const currentShow= useSelector((state)=>state.home.currentShow) 
+    const movieCredits= useSelector((state)=>state.home.moviecredits) 
+    const showCredits= useSelector((state)=>state.home.showcredits) 
+//console.log(herotxt)
+const[element,controls] = useScroll();
 
     let movietrailer_image,showtrailer_image,movietrailer_vid,showtrailer_vid=null
     
@@ -90,12 +94,49 @@ const VidClose = () =>{
         
     }, [media]);
   
+    //to store cast to display in return statement
+let cast =[]
+if(movieCredits.length!==0 && media==="movie"){
+    //make sure cast is empty
+    cast=[]
+    //if arraylength is up to 2
+    if(movieCredits.cast.length>=3){
+     for(let i=0;i<=2;i++){
+        cast.push(movieCredits.cast[i].name)
+     }
+    }else if(movieCredits.cast.length>=2){
+        for(let i=0;i<=(movieCredits.cast.length);i++){
+            cast.push(movieCredits.cast[i].name)
+         }
+    }else{
+        cast.push(movieCredits.cast[0].name)
+    }
+
+}
+if(showCredits.length!==0 && media==="tv"){
+     //make sure cast is empty
+     cast=[]
+
+         //if arraylength is up to 2
+    if(showCredits.cast.length>=2){
+        for(let i=0;i<=2;i++){
+           cast.push(showCredits.cast[i].name)
+        }
+    }else if(showCredits.cast.length>=2){
+        for(let i=0;i<=(showCredits.cast.length);i++){
+            cast.push(showCredits.cast[i].name)
+         }
+    }else{
+        cast.push(showCredits.cast[0].name)
+    }
+
+}
+
 
     
     
 
-//console.log(herotxt)
-    const[element,controls] = useScroll();
+
 return(
 <StyledFeature variants={featureScroll} animate={controls} initial="hidden" ref={element} style={{background: `url(https://image.tmdb.org/t/p/original${img})`}}>
 
@@ -124,27 +165,45 @@ return(
 <div className="crew-flex">
 <div className="creator">
 <h1>Creator</h1>
-<p>Lauren Schmidt</p>
+
+ {(currentMovie.length!==0&& media==="movie")&&  (currentMovie.production_companies[0].name)
+}
+
+{(currentMovie.length!==0&& media==="movie")&& currentMovie.production_companies[0].name}
+
+
+{(currentShow.length!==0&&media==="tv")&&currentShow.created_by.map(creator=>{
+    return <p>{creator.name}</p>
+})}
+
+{(currentShow.length!==0&&media==="tv")&&currentShow.production_companies[0].name}
+
 </div>
 <div className="cast">
 <h1>Stars</h1>
 <ul className="stars">
-<li>Henry Cavill</li>
-<li>Anya Chalotra</li>
-<li>Freya Allen</li>
+{
+  cast.map(actor=>{
+     return <li>{actor}</li>
+  })
+}
 </ul>
 </div>
 </div>
 
 <ul className="genres">
-    <li>Action</li>
-    <li>Adventure</li>
-    <li>Drama</li>
+{(currentMovie.length!==0&& media==="movie")&& currentMovie.genres.map(genre=>{
+    return <li id="moviegenre">{genre.name}</li>
+})}
+
+{(currentShow.length!==0&&media==="tv")&&currentShow.genres.map(genre=>{
+    return <li id="showgenre">{genre.name}</li>
+})}
 </ul>
 </CrewDeets>
 
 <TagDeets>
-<p>1/5</p>
+<p>{position}/5</p>
 </TagDeets>
 
 
@@ -202,7 +261,7 @@ iframe,#button{
 
 
 const MovieDeets = styled(motion.div)`
-width:70% ;
+width:65% ;
 height:100% ;
 border:1px solid #d1d1d133 ;
 margin-left:20px ;
@@ -212,13 +271,18 @@ h1{
     font-family:'NetflixSansBold', sans-serif ;
     font-size:30px ;
     margin-top:150px ;
-    line-height:55px ;
+    margin-bottom:10px ;
 }
 p{
     font-size:15px ;
     width:60% ;
     line-height:17px ;
     font-family:'NetflixSansMedium', sans-serif ;
+    overflow: hidden;
+text-overflow: ellipsis;
+display: -webkit-box;
+-webkit-line-clamp: 5;
+-webkit-box-orient: vertical;
 }
 `
 
@@ -229,11 +293,12 @@ background-size:cover !important;
 top:70% ;
 cursor: pointer;
 position:absolute ;
+padding:0 ;
 
 
 div{
     height:30px ;
-    width:auto ;
+    width:200px ;
     p{
         text-transform:uppercase ;
     font-size:18px ;
@@ -256,13 +321,14 @@ div{
     background-color:black ;
     margin-top:90px ;
     left:-100% ;
+    pointer-events:none
     }
 }
 
 
 &:hover{
     .background{
-     left:1.91% ;
+     left:0% ;
      transition:.6s ease-out ;
      transition-delay:0 ;
     }
@@ -270,14 +336,14 @@ div{
 `
 
 const CrewDeets = styled(motion.div)`
-width: 25%;
+width: 30%;
 height:100% ;
 border:1px solid #d1d1d133 ;
 
 .crew-flex{
     display:flex ;
     justify-content:space-between ;
-  margin-top:100% ;
+  margin-top:270px ;
     h1{
         font-size:15px ;
         font-family:'NetflixSansBold',sans-serif ;
@@ -287,8 +353,11 @@ border:1px solid #d1d1d133 ;
     list-style:none;
 }
 
-
+.creator{
+    width:50% ;
+}
 .cast{
+    width:50% ;
     display:flex ;
     flex-direction:column ;
 text-align:right ;
@@ -299,11 +368,17 @@ text-align:right ;
 .genres{
     list-style:none ;
     display:flex ;
+    flex-wrap:wrap ;
     justify-content:space-between ;
-    width:70% ;
+    width:100% ;
+    height:40px ;
     margin-top:80px ;
     font-family:'NetflixSansMedium', sans-serif ;
     font-size:15px ;
+
+    li{
+        line-height:20px ;
+    }
 }
 
 
