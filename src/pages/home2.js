@@ -20,7 +20,7 @@ import arrowr from '../img/arrowr.svg'
 
 
 
-const Home = () => {
+const Home2 = () => {
   
     //get that data back. Note: make sure to not add parenthesis if it is just onename 
     const popular= useSelector((state)=>state.home.popular) 
@@ -140,4 +140,4 @@ img{
 
 
 
-export default Home;
+export default Home2;

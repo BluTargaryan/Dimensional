@@ -1,6 +1,9 @@
 import { motion } from "framer-motion";
 import styled from "styled-components";
 
+//route
+import { Link } from "react-router-dom";
+
 import search from '../img/search.svg'
 
 const Nav = () => {
@@ -8,8 +11,14 @@ return(
     <StyledNav>
         <Logo>Dimensional</Logo>
         <ul>
+            <Link id="home" to="/" style={{ textDecoration: 'none', color: 'white' }}>
             <li>Home</li>
+            </Link>
+           
+            <Link id="tv" to="/home2" style={{ textDecoration: 'none', color: 'white' }}>
             <li>tv shows</li>
+            </Link>
+            
             <li>movies</li>
         </ul>
         <Form>

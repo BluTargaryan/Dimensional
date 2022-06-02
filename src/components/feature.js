@@ -3,12 +3,12 @@ import styled from "styled-components";
 
 import close from '../img/close-blk.svg'
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 //redux
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
-
+import { loadCurrSeason, loadCurrSeasonVids } from "../actions/homeAction";
 
 
 import { featureScroll } from "./animation";
@@ -25,7 +25,15 @@ const Feature = ({img,herotxt,description,media,position}) => {
     const currentShow= useSelector((state)=>state.home.currentShow) 
     const movieCredits= useSelector((state)=>state.home.moviecredits) 
     const showCredits= useSelector((state)=>state.home.showcredits) 
-//console.log(herotxt)
+
+
+    const dispatch = useDispatch();
+    if(currentShow.length!==0){
+        //to load show current season (vids too)
+dispatch(loadCurrSeason((currentShow.id),(currentShow.seasons.length)))
+dispatch(loadCurrSeasonVids((currentShow.id),(currentShow.seasons.length)))
+    }
+
 const[element,controls] = useScroll();
 
     let movietrailer_image,showtrailer_image,movietrailer_vid,showtrailer_vid=null
@@ -46,6 +54,8 @@ const[element,controls] = useScroll();
     }
     if(currentShow.length!==0){
         showtrailer_image=currentShow.images.backdrops[1].file_path
+
+        
         let videos = currentShow.videos.results
         videos.map(video=>{
             if(video.type==="Trailer"){
@@ -166,10 +176,12 @@ return(
 <div className="creator">
 <h1>Creator</h1>
 
- {(currentMovie.length!==0&& media==="movie")&&  (currentMovie.production_companies[0].name)
+ {(currentMovie.length!==0&& media==="movie")&&  (currentMovie.production_companies.map(company=>{
+     return <p>{company.name}</p>
+ }))
 }
 
-{(currentMovie.length!==0&& media==="movie")&& currentMovie.production_companies[0].name}
+
 
 
 {(currentShow.length!==0&&media==="tv")&&currentShow.created_by.map(creator=>{
